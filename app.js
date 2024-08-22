@@ -32,6 +32,12 @@ db.connect((err) => {
     console.log('Terhubung ke database sebagai ID ' + db.threadId);
 });
 
+// Fungsi untuk mengonversi tanggal dari format dd/mm/yyyy ke yyyy-mm-dd
+function formatTanggal(tanggal) {
+    const [day, month, year] = tanggal.split('/');
+    return `${year}-${month}-${day}`;
+}
+
 // Halaman Home
 app.get('/', (req, res) => {
     res.render('index');
@@ -60,7 +66,7 @@ app.post('/booking', (req, res) => {
         nomor_identitas: req.body.nomor_identitas,
         tipe_kamar: req.body.tipe_kamar,
         harga: req.body.harga,
-        tanggal_pesan: req.body.tanggal_pesan,
+        tanggal_pesan: formatTanggal(req.body.tanggal_pesan), // Format tanggal yang benar
         durasi_menginap: req.body.durasi_menginap,
         termasuk_breakfast: req.body.termasuk_breakfast ? true : false,
         total_bayar: req.body.total_bayar
@@ -68,8 +74,12 @@ app.post('/booking', (req, res) => {
 
     const sql = 'INSERT INTO bookings SET ?';
     db.query(sql, bookingData, (err, result) => {
-        if (err) throw err;
-        res.send('Pemesanan berhasil disimpan!');
+        if (err) {
+            console.error('Error saat menyimpan pemesanan: ' + err);
+            res.status(500).send('Terjadi kesalahan saat menyimpan pemesanan.');
+        } else {
+            res.send('Pemesanan berhasil disimpan!');
+        }
     });
 });
 
