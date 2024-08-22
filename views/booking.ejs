@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book a Room</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Book a Room</h1>
+        <nav>
+            <a href="/">Home</a>
+            <a href="/products">Products</a>
+            <a href="/about">About Us</a>
+            <a href="/booking">Book Now</a>
+        </nav>
+    </header>
+    <main>
+        <form action="/booking" method="post">
+            <div>
+                <label for="nama_pemesan">Nama Pemesan:</label>
+                <input type="text" id="nama_pemesan" name="nama_pemesan" required>
+            </div>
+
+            <div>
+                <label for="jenis_kelamin">Jenis Kelamin:</label>
+                <select id="jenis_kelamin" name="jenis_kelamin">
+                    <option value="Laki-laki">Laki-laki</option>
+                    <option value="Perempuan">Perempuan</option>
+                </select>
+            </div>
+
+            <div>
+                <label for="nomor_identitas">Nomor Identitas:</label>
+                <input type="text" id="nomor_identitas" name="nomor_identitas" pattern="\d{16}" required>
+            </div>
+
+            <div>
+                <label for="tipe_kamar">Tipe Kamar:</label>
+                <select id="tipe_kamar" name="tipe_kamar">
+                    <option value="Standar" data-harga="500000">Standar</option>
+                    <option value="Deluxe" data-harga="1000000">Deluxe</option>
+                    <option value="Family" data-harga="1500000">Family</option>
+                </select>
+            </div>
+
+            <div>
+                <label for="harga">Harga:</label>
+                <input type="text" id="harga" name="harga" readonly>
+            </div>
+
+            <div>
+                <label for="tanggal_pesan">Tanggal Pesan:</label>
+                <input type="text" id="tanggal_pesan" name="tanggal_pesan" required placeholder="dd/mm/yyyy">
+            </div>
+
+            <div>
+                <label for="durasi_menginap">Durasi Menginap (Hari):</label>
+                <input type="text" id="durasi_menginap" name="durasi_menginap" required pattern="\d+">
+            </div>
+
+            <div>
+                <label for="termasuk_breakfast">Termasuk Breakfast:</label>
+                <input type="checkbox" id="termasuk_breakfast" name="termasuk_breakfast">
+            </div>
+
+            <div>
+                <label for="total_bayar">Total Bayar:</label>
+                <input type="text" id="total_bayar" name="total_bayar" readonly>
+            </div>
+
+            <div>
+                <button type="button" onclick="hitungTotal()">Hitung Total</button>
+                <button type="submit">Pesan Sekarang</button>
+            </div>
+        </form>
+    </main>
+    <footer>
+        <p>&copy; 2024 Hotel Booking</p>
+    </footer>
+
+    <script>
+        document.getElementById('tipe_kamar').addEventListener('change', function() {
+            const harga = this.options[this.selectedIndex].getAttribute('data-harga');
+            document.getElementById('harga').value = harga;
+        });
+
+        function hitungTotal() {
+            const harga = parseFloat(document.getElementById('harga').value);
+            const durasi = parseInt(document.getElementById('durasi_menginap').value);
+            let total = harga * durasi;
+
+            if (durasi > 3) total *= 0.9;
+
+            if (document.getElementById('termasuk_breakfast').checked) total += 80000;
+
+            document.getElementById('total_bayar').value = total;
+        }
+    </script>
+</body>
+</html>
