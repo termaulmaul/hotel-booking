@@ -17,7 +17,7 @@ app.set('view engine', 'ejs');
 // Membuat koneksi ke database
 const db = mysql.createConnection({
     host: 'localhost',
-    port: 3308,
+    port: 3306,
     user: 'root',
     password: '',
     database: 'hotel_booking'

@@ -24,12 +24,20 @@
             </div>
 
             <div>
-                <label for="jenis_kelamin">Jenis Kelamin:</label>
-                <select id="jenis_kelamin" name="jenis_kelamin">
-                    <option value="Laki-laki">Laki-laki</option>
-                    <option value="Perempuan">Perempuan</option>
-                </select>
+                <label>Jenis Kelamin:</label>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div style="display: flex; align-items: center;">
+                        <input type="radio" id="laki_laki" name="jenis_kelamin" value="Laki-laki" required>
+                        <label for="laki_laki" style="margin-left: 5px;">Laki-laki</label>
+                    </div>
+                    <div style="display: flex; align-items: center;">
+                        <input type="radio" id="perempuan" name="jenis_kelamin" value="Perempuan">
+                        <label for="perempuan" style="margin-left: 5px;">Perempuan</label>
+                    </div>
+                </div>
             </div>
+            
+            
 
             <div>
                 <label for="nomor_identitas">Nomor Identitas:</label>
@@ -77,7 +85,7 @@
         </form>
     </main>
     <footer>
-        <p>&copy; 2024 Hotel Booking</p>
+        <p>&copy; 2024 NGAMAR.COM</p>
     </footer>
 
     <script>
