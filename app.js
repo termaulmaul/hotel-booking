@@ -66,7 +66,7 @@ app.post('/booking', (req, res) => {
         nomor_identitas: req.body.nomor_identitas,
         tipe_kamar: req.body.tipe_kamar,
         harga: req.body.harga,
-        tanggal_pesan: formatTanggal(req.body.tanggal_pesan), // Format tanggal yang benar
+        tanggal_pesan: formatTanggal(req.body.tanggal_pesan),
         durasi_menginap: req.body.durasi_menginap,
         termasuk_breakfast: req.body.termasuk_breakfast ? true : false,
         total_bayar: req.body.total_bayar
@@ -76,9 +76,9 @@ app.post('/booking', (req, res) => {
     db.query(sql, bookingData, (err, result) => {
         if (err) {
             console.error('Error saat menyimpan pemesanan: ' + err);
-            res.status(500).send('Terjadi kesalahan saat menyimpan pemesanan.');
+            res.status(500).json({ success: false, message: 'Terjadi kesalahan saat menyimpan pemesanan.' });
         } else {
-            res.send('Pemesanan berhasil disimpan!');
+            res.json({ success: true, message: 'Pemesanan berhasil disimpan!' });
         }
     });
 });
