@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Booking</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Edit Booking - ID <%= booking.id %></h1>
+    </header>
+    
+    <main>
+        <form action="/admin_edit/<%= booking.id %>" method="POST">
+            <label for="nama_pemesan">Nama Pemesan:</label>
+            <input type="text" id="nama_pemesan" name="nama_pemesan" value="<%= booking.nama_pemesan %>" required>
+
+            <label>Jenis Kelamin:</label>
+            <label><input type="radio" name="jenis_kelamin" value="Laki Laki" <%= booking.jenis_kelamin === 'Laki Laki' ? 'checked' : '' %>> Laki Laki</label>
+            <label><input type="radio" name="jenis_kelamin" value="Perempuan" <%= booking.jenis_kelamin === 'Perempuan' ? 'checked' : '' %>> Perempuan</label>
+
+            <label for="nomor_identitas">Nomor Identitas:</label>
+            <input type="text" id="nomor_identitas" name="nomor_identitas" value="<%= booking.nomor_identitas %>" required>
+
+            <label for="tipe_kamar">Tipe Kamar:</label>
+            <input type="text" id="tipe_kamar" name="tipe_kamar" value="<%= booking.tipe_kamar %>" required>
+
+            <label for="harga">Harga:</label>
+            <input type="text" id="harga" name="harga" value="<%= booking.harga %>" required>
+
+            <label for="tanggal_pesan">Tanggal Pesan:</label>
+            <input type="text" id="tanggal_pesan" name="tanggal_pesan" value="<%= booking.tanggal_pesan %>" required>
+
+            <label for="durasi_menginap">Durasi Menginap:</label>
+            <input type="text" id="durasi_menginap" name="durasi_menginap" value="<%= booking.durasi_menginap %>" required>
+
+            <label><input type="checkbox" name="termasuk_breakfast" <%= booking.termasuk_breakfast ? 'checked' : '' %>> Termasuk Breakfast</label>
+
+            <label for="total_bayar">Total Bayar:</label>
+            <input type="text" id="total_bayar" name="total_bayar" value="<%= booking.total_bayar %>" required>
+
+            <button type="submit">Simpan Perubahan</button>
+        </form>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Hotel Booking Admin Panel</p>
+    </footer>
+</body>
+</html>

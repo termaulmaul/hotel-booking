@@ -7,82 +7,386 @@ body, h1, h2, h3, p, a, ul, li {
 
 /* Set default font and background */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Open Sans', sans-serif;
     line-height: 1.6;
-    background-color: #f4f4f4;
+    background-color: #f0f2f5;
     color: #333;
+    overflow-x: hidden;
 }
 
 /* Header styles */
 header {
-    background: #333;
+    background: linear-gradient(135deg, #3a3a3a, #444);
     color: #fff;
-    padding: 10px 0;
+    padding: 20px 0;
     text-align: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
 header h1 {
     margin-bottom: 10px;
+    font-size: 2.5rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
 }
 
 nav a {
     color: #fff;
     text-decoration: none;
-    margin: 0 15px;
-    font-weight: bold;
+    margin: 0 20px;
+    font-weight: 600;
+    text-transform: uppercase;
+    transition: color 0.3s ease-in-out;
 }
 
 nav a:hover {
+    color: #f0a500;
     text-decoration: underline;
 }
 
 /* Main content styles */
 main {
-    max-width: 800px;
-    margin: 20px auto;
-    padding: 20px;
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 30px;
     background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive Main Content */
+@media (max-width: 768px) {
+    main {
+        padding: 20px;
+    }
 }
 
 form label {
     display: block;
-    margin: 10px 0 5px;
+    margin: 15px 0 8px;
+    font-weight: 600;
+    color: #333;
 }
 
 form input[type="text"],
 form select {
-    width: calc(100% - 22px);
-    padding: 10px;
+    width: calc(100% - 24px);
+    padding: 12px;
     border: 1px solid #ddd;
-    border-radius: 4px;
-    margin-bottom: 10px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+}
+
+form input[type="text"]:focus,
+form select:focus {
+    border-color: #555;
 }
 
 form input[type="checkbox"] {
-    margin-right: 10px;
+    margin-right: 12px;
 }
 
 form button {
-    padding: 10px 20px;
+    padding: 12px 25px;
     border: none;
-    border-radius: 4px;
-    background: #333;
+    border-radius: 5px;
+    background: #444;
     color: #fff;
     cursor: pointer;
     font-size: 16px;
+    font-weight: 600;
+    transition: background 0.3s ease-in-out, transform 0.3s ease-in-out;
 }
 
 form button:hover {
-    background: #555;
+    background: #f0a500;
+    transform: translateY(-2px);
 }
 
 /* Footer styles */
 footer {
     text-align: center;
-    padding: 10px 0;
-    background: #333;
+    padding: 15px 0;
+    background: linear-gradient(135deg, #3a3a3a, #444);
     color: #fff;
+    margin-top: 30px;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
+    font-size: 0.9rem;
+}
+
+/* Additional styles */
+h1, h2, h3 {
+    color: #444;
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+
+p {
+    margin-bottom: 20px;
+    line-height: 1.8;
+    font-size: 1.1rem;
+}
+
+a {
+    color: #f0a500;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: #333;
+    text-decoration: underline;
+}
+
+/* Input radio styles */
+form input[type="radio"] {
+    margin-right: 10px;
+}
+
+/* Admin Table Styles */
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
     margin-top: 20px;
+}
+
+.admin-table th,
+.admin-table td {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    text-align: center;
+    transition: background 0.3s ease;
+}
+
+.admin-table th {
+    background-color: #f0a500;
+    color: #fff;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.admin-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.admin-table tr:hover {
+    background-color: #f1f1f1;
+    transform: scale(1.02);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Action buttons in admin table */
+.admin-table .action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.admin-table .action-buttons button {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.admin-table .action-buttons .edit {
+    background-color: #4caf50;
+    color: #fff;
+}
+
+.admin-table .action-buttons .delete {
+    background-color: #f44336;
+    color: #fff;
+}
+
+.admin-table .action-buttons .verify {
+    background-color: #008cba;
+    color: #fff;
+}
+
+.admin-table .action-buttons button:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+}
+
+/* Responsive Admin Table */
+@media (max-width: 768px) {
+    .admin-table th, .admin-table td {
+        font-size: 0.9rem;
+        padding: 10px;
+    }
+
+    .admin-table .action-buttons {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .admin-table .action-buttons button {
+        font-size: 0.8rem;
+        padding: 6px 10px;
+    }
+}
+
+/* Admin Dashboard Styles */
+.admin-dashboard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-top: 30px;
+}
+
+.admin-dashboard h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #333;
+    font-weight: 700;
+}
+
+.admin-dashboard .admin-overview {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.admin-dashboard .admin-overview .card {
+    flex: 1;
+    padding: 20px;
+    background-color: #f0f2f5;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+    margin-right: 20px;
+    text-align: center;
+}
+
+.admin-dashboard .admin-overview .card:last-child {
+    margin-right: 0;
+}
+
+.admin-dashboard .admin-overview .card h3 {
+    font-size: 1.5rem;
+    color: #444;
+    margin-bottom: 10px;
+}
+
+.admin-dashboard .admin-overview .card p {
+    font-size: 1.2rem;
+    color: #666;
+}
+
+.admin-dashboard .admin-actions {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.admin-dashboard .admin-actions a {
+    flex: 1;
+    padding: 15px;
+    background-color: #008cba;
+    color: #fff;
+    text-align: center;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background 0.3s ease;
+}
+
+.admin-dashboard .admin-actions a:hover {
+    background-color: #005f7a;
+}
+
+/* Responsive Admin Dashboard */
+@media (max-width: 768px) {
+    .admin-dashboard .admin-overview {
+        flex-direction: column;
+    }
+
+    .admin-dashboard .admin-overview .card {
+        margin-right: 0;
+        margin-bottom: 20px;
+    }
+
+    .admin-dashboard .admin-actions a {
+        margin-bottom: 10px;
+    }
+}
+
+/* Admin Edit Form Styles */
+.admin-edit-form {
+    max-width: 600px;
+    margin: 30px auto;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.admin-edit-form h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #333;
+    font-weight: 700;
+    text-align: center;
+}
+
+.admin-edit-form form label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 600;
+    color: #444;
+}
+
+.admin-edit-form form input[type="text"],
+.admin-edit-form form input[type="email"],
+.admin-edit-form form select {
+    width: calc(100% - 24px);
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+}
+
+.admin-edit-form form input[type="text"]:focus,
+.admin-edit-form form input[type="email"]:focus,
+.admin-edit-form form select:focus {
+    border-color: #008cba;
+}
+
+.admin-edit-form form button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    background-color: #4caf50;
+    color: #fff;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    transition: background 0.3s ease;
+}
+
+.admin-edit-form form button:hover {
+    background-color: #45a049;
+}
+
+/* Responsive Admin Edit Form */
+@media (max-width: 768px) {
+    .admin-edit-form {
+        padding: 20px;
+    }
+
+    .admin-edit-form form button {
+        padding: 10px;
+    }
 }

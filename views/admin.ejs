@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Manage Bookings</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Admin Page - Manage Bookings</h1>
+    </header>
+    
+    <main>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nama Pemesan</th>
+                    <th>Jenis Kelamin</th>
+                    <th>Nomor Identitas</th>
+                    <th>Tipe Kamar</th>
+                    <th>Harga</th>
+                    <th>Tanggal Pesan</th>
+                    <th>Durasi Menginap</th>
+                    <th>Termasuk Breakfast</th>
+                    <th>Total Bayar</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% bookings.forEach(function(booking) { %>
+                <tr>
+                    <td><%= booking.id %></td>
+                    <td><%= booking.nama_pemesan %></td>
+                    <td><%= booking.jenis_kelamin %></td>
+                    <td><%= booking.nomor_identitas %></td>
+                    <td><%= booking.tipe_kamar %></td>
+                    <td><%= booking.harga %></td>
+                    <td><%= booking.tanggal_pesan %></td>
+                    <td><%= booking.durasi_menginap %></td>
+                    <td><%= booking.termasuk_breakfast ? "Ya" : "Tidak" %></td>
+                    <td><%= booking.total_bayar %></td>
+                    <td>
+                        <a href="/admin_edit/<%= booking.id %>">Edit</a>
+                        <form action="/admin_delete/<%= booking.id %>" method="POST" style="display:inline;">
+                            <button type="submit" onclick="return confirm('Apakah Anda yakin ingin menghapus pesanan ini?');">Hapus</button>
+                        </form>
+                    </td>
+                </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Hotel Booking Admin Panel</p>
+    </footer>
+</body>
+</html>
