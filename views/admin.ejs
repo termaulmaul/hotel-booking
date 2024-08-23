@@ -4,146 +4,99 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - Manage Bookings</title>
-    <style>
-            /* Reset some default styles */
-    body, h1, table {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
-
-    /* General body styling */
-    body {
-        font-family: Arial, sans-serif;
-        line-height: 1.6;
-        background-color: #f4f4f4;
-        color: #333;
-    }
-
-    /* Header styling */
-    header {
-        background-color: #333;
-        color: #fff;
-        padding: 1rem;
-        text-align: center;
-    }
-
-    header h1 {
-        margin: 0;
-    }
-
-    /* Main content styling */
-    main {
-        padding: 1rem;
-    }
-
-    /* Table styling */
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin: 1rem 0;
-    }
-
-    th, td {
-        padding: 0.75rem;
-        text-align: left;
-        border-bottom: 1px solid #ddd;
-    }
-
-    th {
-        background-color: #333;
-        color: #fff;
-    }
-
-    tr:nth-child(even) {
-        background-color: #f2f2f2;
-    }
-
-    /* Link styling */
-    a {
-        color: #007bff;
-        text-decoration: none;
-    }
-
-    a:hover {
-        text-decoration: underline;
-    }
-
-    /* Button styling */
-    button {
-        background-color: #dc3545;
-        color: #fff;
-        border: none;
-        padding: 0.5rem 1rem;
-        cursor: pointer;
-    }
-
-    button:hover {
-        background-color: #c82333;
-    }
-
-    /* Footer styling */
-    footer {
-        background-color: #333;
-        color: #fff;
-        text-align: center;
-        padding: 1rem;
-        position: fixed;
-        width: 100%;
-        bottom: 0;
-    }
-
-    </style>
+    <link rel="stylesheet" href="/css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <header>
         <h1>Admin Page - Manage Bookings</h1>
     </header>
-    
-    <main>
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Nama Pemesan</th>
-                    <th>Jenis Kelamin</th>
-                    <th>Nomor Identitas</th>
-                    <th>Tipe Kamar</th>
-                    <th>Harga</th>
-                    <th>Tanggal Pesan</th>
-                    <th>Durasi Menginap</th>
-                    <th>Termasuk Breakfast</th>
-                    <th>Total Bayar</th>
-                    <th>Aksi</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% bookings.forEach(function(booking) { %>
-                <tr>
-                    <td><%= booking.id %></td>
-                    <td><%= booking.nama_pemesan %></td>
-                    <td><%= booking.jenis_kelamin %></td>
-                    <td><%= booking.nomor_identitas %></td>
-                    <td><%= booking.tipe_kamar %></td>
-                    <td><%= booking.harga %></td>
-                    <td><%= booking.tanggal_pesan %></td>
-                    <td><%= booking.durasi_menginap %></td>
-                    <td><%= booking.termasuk_breakfast ? "Ya" : "Tidak" %></td>
-                    <td><%= booking.total_bayar %></td>
-                    <td>
-                        <a href="/admin_edit/<%= booking.id %>">Edit</a>
-                        <form action="/admin_delete/<%= booking.id %>" method="POST" style="display:inline;">
-                            <button type="submit" onclick="return confirm('Apakah Anda yakin ingin menghapus pesanan ini?');">Hapus</button>
-                        </form>
-                    </td>
-                </tr>
-                <% }); %>
-            </tbody>
-        </table>
-    </main>
+    <main class="admin-main">
+        <!-- Date Selection -->
+        <div class="date-selection">
+            <form action="/admin" method="GET">
+                <label for="date">Pilih Tanggal:</label>
+                <input type="date" id="date" name="date" value="<%= selectedDate %>" max="<%= today %>" />
+                <button type="submit">Tampilkan</button>
+            </form>
+        </div>
 
+        <!-- Sales Chart -->
+        <section class="sales-chart">
+            <h2>Pemesanan Bulan Ini</h2>
+            <canvas id="salesChart"></canvas>
+        </section>
+
+        <!-- Orders Table -->
+        <section class="orders-table">
+            <h2>Daftar Pesanan</h2>
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nama Pemesan</th>
+                        <th>Jenis Kelamin</th>
+                        <th>Nomor Identitas</th>
+                        <th>Tipe Kamar</th>
+                        <th>Harga</th>
+                        <th>Tanggal Pesan</th>
+                        <th>Durasi Menginap</th>
+                        <th>Termasuk Breakfast</th>
+                        <th>Total Bayar</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% bookings.forEach(function(booking) { %>
+                    <tr>
+                        <td><%= booking.id %></td>
+                        <td><%= booking.nama_pemesan %></td>
+                        <td><%= booking.jenis_kelamin %></td>
+                        <td><%= booking.nomor_identitas %></td>
+                        <td><%= booking.tipe_kamar %></td>
+                        <td><%= formatRupiah(booking.harga) %></td>
+                        <td><%= booking.tanggal_pesan %></td>
+                        <td><%= booking.durasi_menginap %></td>
+                        <td><%= booking.termasuk_breakfast ? "Ya" : "Tidak" %></td>
+                        <td><%= formatRupiah(booking.total_bayar) %></td>
+                        <td class="action-buttons">
+                            <a href="/admin_edit/<%= booking.id %>" class="edit">Edit</a>
+                            <form action="/admin_delete/<%= booking.id %>" method="POST" style="display:inline;">
+                                <button type="submit" class="delete" onclick="return confirm('Apakah Anda yakin ingin menghapus pesanan ini?');">Hapus</button>
+                            </form>
+                        </td>
+                    </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        </section>
+    </main>
     <footer>
         <p>&copy; 2024 Hotel Booking Admin Panel</p>
     </footer>
+    <script>
+        // Data for Sales Chart
+        const ctx = document.getElementById('salesChart').getContext('2d');
+        const salesChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: <%- JSON.stringify(chartLabels) %>,
+                datasets: [{
+                    label: 'Jumlah Pemesanan',
+                    data: <%- JSON.stringify(chartData) %>,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>    
 </body>
 </html>

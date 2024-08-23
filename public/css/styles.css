@@ -16,7 +16,7 @@ body {
 
 /* Header styles */
 header {
-    background: linear-gradient(135deg, #3a3a3a, #444);
+    background: linear-gradient(135deg, #4a4a4a, #666);
     color: #fff;
     padding: 20px 0;
     text-align: center;
@@ -30,6 +30,7 @@ header h1 {
     letter-spacing: 1.5px;
 }
 
+/* Navigation styles */
 nav a {
     color: #fff;
     text-decoration: none;
@@ -40,13 +41,14 @@ nav a {
 }
 
 nav a:hover {
-    color: #f0a500;
+    color: #c0c0c0;
     text-decoration: underline;
 }
 
 /* Main content styles */
 main {
-    max-width: 900px;
+    max-width: 1200px; /* Set a reasonable maximum width */
+    width: 90%; /* Adjust width to container size */
     margin: 30px auto;
     padding: 30px;
     background: #fff;
@@ -54,23 +56,39 @@ main {
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
 }
 
+/* Special styles for admin.ejs */
+.admin-main {
+    width: 100%; /* Ensure full width */
+    margin: 0 auto; /* Center align */
+    padding: 20px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
 /* Responsive Main Content */
 @media (max-width: 768px) {
-    main {
-        padding: 20px;
+    main, .admin-main {
+        padding: 15px;
     }
+}
+
+/* Form styles */
+form {
+    margin-bottom: 20px;
 }
 
 form label {
     display: block;
-    margin: 15px 0 8px;
+    margin-bottom: 8px;
     font-weight: 600;
     color: #333;
 }
 
 form input[type="text"],
+form input[type="email"],
 form select {
-    width: calc(100% - 24px);
+    width: 100%;
     padding: 12px;
     border: 1px solid #ddd;
     border-radius: 5px;
@@ -80,8 +98,9 @@ form select {
 }
 
 form input[type="text"]:focus,
+form input[type="email"]:focus,
 form select:focus {
-    border-color: #555;
+    border-color: #666;
 }
 
 form input[type="checkbox"] {
@@ -89,19 +108,19 @@ form input[type="checkbox"] {
 }
 
 form button {
-    padding: 12px 25px;
+    padding: 12px 20px;
     border: none;
     border-radius: 5px;
-    background: #444;
+    background: #666;
     color: #fff;
     cursor: pointer;
     font-size: 16px;
     font-weight: 600;
-    transition: background 0.3s ease-in-out, transform 0.3s ease-in-out;
+    transition: background 0.3s ease, transform 0.3s ease;
 }
 
 form button:hover {
-    background: #f0a500;
+    background: #555;
     transform: translateY(-2px);
 }
 
@@ -109,28 +128,28 @@ form button:hover {
 footer {
     text-align: center;
     padding: 15px 0;
-    background: linear-gradient(135deg, #3a3a3a, #444);
+    background: linear-gradient(135deg, #4a4a4a, #666);
     color: #fff;
-    margin-top: 23pc;
+    margin-top: 30px;
     box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
     font-size: 0.9rem;
 }
 
 /* Additional styles */
 h1, h2, h3 {
-    color: #444;
+    color: #333;
     margin-bottom: 20px;
     font-weight: 700;
 }
 
 p {
     margin-bottom: 20px;
-    line-height: 0.4;
+    line-height: 1.8;
     font-size: 1.1rem;
 }
 
 a {
-    color: #f0a500;
+    color: #666;
     text-decoration: none;
     transition: color 0.3s ease;
 }
@@ -161,7 +180,7 @@ form input[type="radio"] {
 }
 
 .admin-table th {
-    background-color: #f0a500;
+    background-color: #666;
     color: #fff;
     font-weight: bold;
     text-transform: uppercase;
@@ -184,27 +203,28 @@ form input[type="radio"] {
     gap: 10px;
 }
 
+.admin-table .action-buttons a,
 .admin-table .action-buttons button {
     padding: 8px 15px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     transition: background 0.3s ease, transform 0.3s ease;
+    text-decoration: none;
+    color: #fff;
+    font-weight: 600;
 }
 
 .admin-table .action-buttons .edit {
     background-color: #4caf50;
-    color: #fff;
 }
 
 .admin-table .action-buttons .delete {
     background-color: #f44336;
-    color: #fff;
 }
 
 .admin-table .action-buttons .verify {
     background-color: #008cba;
-    color: #fff;
 }
 
 .admin-table .action-buttons button:hover {
@@ -224,6 +244,7 @@ form input[type="radio"] {
         gap: 5px;
     }
 
+    .admin-table .action-buttons a,
     .admin-table .action-buttons button {
         font-size: 0.8rem;
         padding: 6px 10px;
@@ -291,7 +312,7 @@ form input[type="radio"] {
 .admin-dashboard .admin-actions a {
     flex: 1;
     padding: 15px;
-    background-color: #008cba;
+    background-color: #666;
     color: #fff;
     text-align: center;
     border-radius: 5px;
@@ -301,7 +322,7 @@ form input[type="radio"] {
 }
 
 .admin-dashboard .admin-actions a:hover {
-    background-color: #005f7a;
+    background-color: #555;
 }
 
 /* Responsive Admin Dashboard */
@@ -348,7 +369,7 @@ form input[type="radio"] {
 .admin-edit-form form input[type="text"],
 .admin-edit-form form input[type="email"],
 .admin-edit-form form select {
-    width: calc(100% - 24px);
+    width: 100%;
     padding: 12px;
     border: 1px solid #ddd;
     border-radius: 5px;
@@ -360,7 +381,7 @@ form input[type="radio"] {
 .admin-edit-form form input[type="text"]:focus,
 .admin-edit-form form input[type="email"]:focus,
 .admin-edit-form form select:focus {
-    border-color: #008cba;
+    border-color: #666;
 }
 
 .admin-edit-form form button {

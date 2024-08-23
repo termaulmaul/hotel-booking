@@ -4,95 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Booking</title>
-    <style>
-        /* Reset some default styles */
-        body, h1, table, form, input, label {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        /* General body styling */
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 0;
-            background-color: #f4f4f4;
-            color: #333;
-        }
-
-        /* Header styling */
-        header {
-            background-color: #333;
-            color: #fff;
-            padding: 1rem;
-            text-align: center;
-        }
-
-        header h1 {
-            margin: 25px;
-        }
-
-        /* Main content styling */
-        main {
-            padding: 2rem;
-        }
-
-        /* Form styling */
-        form {
-            background-color: #fff;
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        label {
-            display: block;
-            margin: 0.5rem 0;
-            font-weight: bold;
-        }
-
-        input[type="text"], input[type="radio"], input[type="checkbox"] {
-            margin: 0.5rem 0;
-            padding: 0.5rem;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            width: calc(100% - 2rem);
-        }
-
-        input[type="radio"], input[type="checkbox"] {
-            width: auto;
-            margin-right: 0.5rem;
-        }
-
-        button {
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            padding: 0.75rem 1.5rem;
-            cursor: pointer;
-            border-radius: 4px;
-            font-size: 1rem;
-            margin-top: 1rem;
-        }
-
-        button:hover {
-            background-color: #0056b3;
-        }
-
-        /* Footer styling */
-        footer {
-            background-color: #333;
-            color: #fff;
-            text-align: center;
-            padding: 1rem;
-            position: fixed;
-            width: 100%;
-            bottom: 0;
-        }
-    </style>
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-    <header style="height: 3pc;">
+    <header>
         <h1>Edit Booking - ID <%= booking.id %></h1>
     </header>
     
@@ -112,7 +27,7 @@
             <input type="text" id="tipe_kamar" name="tipe_kamar" value="<%= booking.tipe_kamar %>" required>
 
             <label for="harga">Harga:</label>
-            <input type="text" id="harga" name="harga" value="<%= booking.harga %>" required>
+            <input type="text" id="harga" name="harga" value="<%= formatRupiah(booking.harga) %>" required readonly>
 
             <label for="tanggal_pesan">Tanggal Pesan:</label>
             <input type="text" id="tanggal_pesan" name="tanggal_pesan" value="<%= booking.tanggal_pesan %>" required>
@@ -123,13 +38,13 @@
             <label><input type="checkbox" name="termasuk_breakfast" <%= booking.termasuk_breakfast ? 'checked' : '' %>> Termasuk Breakfast</label>
 
             <label for="total_bayar">Total Bayar:</label>
-            <input type="text" id="total_bayar" name="total_bayar" value="<%= booking.total_bayar %>" required>
+            <input type="text" id="total_bayar" name="total_bayar" value="<%= formatRupiah(booking.total_bayar) %>" required readonly>
 
             <button type="submit">Simpan Perubahan</button>
         </form>
     </main>
 
-    <footer style="height: 18px;">
+    <footer>
         <p>&copy; 2024 Hotel Booking Admin Panel</p>
     </footer>
 </body>

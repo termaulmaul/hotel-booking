@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mysql = require('mysql');
+const moment = require('moment'); // Untuk manipulasi tanggal
 
 // Inisialisasi aplikasi Express
 const app = express();
@@ -17,7 +18,7 @@ app.set('view engine', 'ejs');
 // Membuat koneksi ke database
 const db = mysql.createConnection({
     host: 'localhost',
-    port: 3306,
+    port: 3308,
     user: 'root',
     password: '',
     database: 'hotel_booking'
@@ -32,10 +33,26 @@ db.connect((err) => {
     console.log('Terhubung ke database sebagai ID ' + db.threadId);
 });
 
-// Fungsi untuk mengonversi tanggal dari format dd/mm/yyyy ke yyyy-mm-dd
-function formatTanggal(tanggal) {
-    const [day, month, year] = tanggal.split('/');
-    return `${year}-${month}-${day}`;
+// Fungsi untuk mengonversi harga ke format Rupiah
+function formatRupiah(angka) {
+    return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(angka);
+}
+
+// Membuat fungsi formatRupiah tersedia untuk semua template EJS
+app.locals.formatRupiah = formatRupiah;
+
+// Menghitung total harga setelah diskon
+function hitungTotalHarga(hargaPerMalam, durasiMenginap) {
+    const totalHarga = hargaPerMalam * durasiMenginap;
+    let diskon = 0;
+
+    if (durasiMenginap > 2) {
+        diskon = totalHarga * 0.1; // Diskon 10% jika menginap lebih dari 2 malam
+    }
+
+    const hargaDiskon = totalHarga - diskon;
+
+    return { totalHarga, hargaDiskon, diskon };
 }
 
 // Halaman Home
@@ -55,22 +72,31 @@ app.get('/about', (req, res) => {
 
 // Halaman Pemesanan
 app.get('/booking', (req, res) => {
-    res.render('booking');
+    res.render('booking', { bookingDetail: null });
 });
 
 // Untuk menyimpan data pemesanan ke dalam tabel bookings
 app.post('/booking', (req, res) => {
+    console.log('Tanggal Pesan:', req.body.tanggal_pesan);
+
+    const hargaPerMalam = parseInt(req.body.harga.replace(/[^0-9,-]+/g,"")); // Konversi harga ke integer
+    const durasiMenginap = parseInt(req.body.durasi_menginap);
+
+    const { totalHarga, hargaDiskon, diskon } = hitungTotalHarga(hargaPerMalam, durasiMenginap);
+
     const bookingData = {
         nama_pemesan: req.body.nama_pemesan,
         jenis_kelamin: req.body.jenis_kelamin,
         nomor_identitas: req.body.nomor_identitas,
         tipe_kamar: req.body.tipe_kamar,
-        harga: req.body.harga,
-        tanggal_pesan: formatTanggal(req.body.tanggal_pesan),
-        durasi_menginap: req.body.durasi_menginap,
-        termasuk_breakfast: req.body.termasuk_breakfast ? true : false,
-        total_bayar: req.body.total_bayar
+        harga: totalHarga,
+        tanggal_pesan: req.body.tanggal_pesan, // Hapus formatTanggal jika formatnya sudah benar
+        durasi_menginap: durasiMenginap,
+        termasuk_breakfast: req.body.termasuk_breakfast ? 1 : 0, // Menggunakan 1 atau 0 untuk boolean
+        total_bayar: hargaDiskon + (req.body.termasuk_breakfast ? 80000 : 0) // Tambahkan harga breakfast jika terpilih
     };
+
+    console.log('Data Pemesanan:', bookingData);
 
     const sql = 'INSERT INTO bookings SET ?';
     db.query(sql, bookingData, (err, result) => {
@@ -78,38 +104,60 @@ app.post('/booking', (req, res) => {
             console.error('Error saat menyimpan pemesanan: ' + err);
             res.status(500).json({ success: false, message: 'Terjadi kesalahan saat menyimpan pemesanan.' });
         } else {
-            res.json({ success: true, message: 'Pemesanan berhasil disimpan!' });
+            res.render('booking', { bookingDetail: bookingData });
         }
     });
-});
-
-//halaman detail
-app.post('/booking/detail', (req, res) => {
-    const bookingData = {
-        nama_pemesan: req.body.nama_pemesan,
-        jenis_kelamin: req.body.jenis_kelamin,
-        nomor_identitas: req.body.nomor_identitas,
-        tipe_kamar: req.body.tipe_kamar,
-        harga: req.body.harga,
-        tanggal_pesan: req.body.tanggal_pesan,
-        durasi_menginap: req.body.durasi_menginap,
-        termasuk_breakfast: req.body.termasuk_breakfast ? 'Ya' : 'Tidak',
-        total_bayar: req.body.total_bayar
-    };
-
-    res.render('detail', { booking: bookingData });
 });
 
 
 // Halaman Admin untuk melihat dan mengelola data pemesanan
 app.get('/admin', (req, res) => {
-    const sql = 'SELECT * FROM bookings';
-    db.query(sql, (err, results) => {
+    const today = moment().format('YYYY-MM-DD');
+    const selectedDate = req.query.date || today;
+
+    // Validasi tanggal yang dipilih
+    if (moment(selectedDate).isAfter(today, 'month')) {
+        return res.status(400).send('Tanggal tidak valid, hanya bisa memilih bulan ini atau sebelumnya.');
+    }
+
+    const startOfMonth = moment(selectedDate).startOf('month').format('YYYY-MM-DD');
+    const endOfMonth = moment(selectedDate).endOf('month').format('YYYY-MM-DD');
+
+    const bookingsQuery = 'SELECT * FROM bookings WHERE tanggal_pesan BETWEEN ? AND ?';
+    db.query(bookingsQuery, [startOfMonth, endOfMonth], (err, bookings) => {
         if (err) {
-            console.error('Error saat mengambil data pemesanan: ' + err);
-            res.status(500).send('Terjadi kesalahan saat mengambil data pemesanan.');
+            console.error('Error fetching bookings:', err);
+            res.status(500).send('Internal Server Error');
         } else {
-            res.render('admin', { bookings: results });
+            // Ambil data pemesanan per bulan
+            const monthlyDataQuery = `
+                SELECT MONTH(tanggal_pesan) AS month, COUNT(*) AS total
+                FROM bookings
+                WHERE tanggal_pesan BETWEEN ? AND ?
+                GROUP BY MONTH(tanggal_pesan)
+                ORDER BY MONTH(tanggal_pesan)
+            `;
+            db.query(monthlyDataQuery, [startOfMonth, endOfMonth], (err, monthlyData) => {
+                if (err) {
+                    console.error('Error fetching monthly data:', err);
+                    res.status(500).send('Internal Server Error');
+                } else {
+                    // Format data untuk chart
+                    const chartLabels = Array.from({ length: 12 }, (_, i) => moment().month(i).format('MMM'));
+                    const chartData = Array(12).fill(0);
+                    monthlyData.forEach((row) => {
+                        chartData[row.month - 1] = row.total;
+                    });
+
+                    res.render('admin', {
+                        bookings,
+                        selectedDate,
+                        today,
+                        chartLabels,
+                        chartData
+                    });
+                }
+            });
         }
     });
 });
@@ -140,11 +188,11 @@ app.post('/admin_edit/:id', (req, res) => {
         jenis_kelamin: req.body.jenis_kelamin,
         nomor_identitas: req.body.nomor_identitas,
         tipe_kamar: req.body.tipe_kamar,
-        harga: req.body.harga,
+        harga: parseInt(req.body.harga.replace(/[^0-9,-]+/g,"")),
         tanggal_pesan: formatTanggal(req.body.tanggal_pesan),
-        durasi_menginap: req.body.durasi_menginap,
-        termasuk_breakfast: req.body.termasuk_breakfast ? true : false,
-        total_bayar: req.body.total_bayar
+        durasi_menginap: parseInt(req.body.durasi_menginap),
+        termasuk_breakfast: req.body.termasuk_breakfast ? 1 : 0, // Menggunakan 1 atau 0 untuk boolean
+        total_bayar: parseInt(req.body.total_bayar.replace(/[^0-9,-]+/g,""))
     };
 
     const sql = 'UPDATE bookings SET ? WHERE id = ?';
