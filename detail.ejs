@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Details</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Booking Details</h1>
+        <nav>
+            <a href="/">Home</a>
+            <a href="/products">Produk</a>
+            <a href="/about">Tentang Kami</a>
+            <a href="/booking">Pesan Sekarang</a>
+        </nav>
+    </header>
+    <main>
+        <section>
+            <h2>Terima Kasih Telah Memesan</h2>
+            <p>Berikut adalah detail pesanan Anda:</p>
+            <table>
+                <tr>
+                    <th>Nama Pemesan</th>
+                    <td><%= booking.nama_pemesan %></td>
+                </tr>
+                <tr>
+                    <th>Jenis Kelamin</th>
+                    <td><%= booking.jenis_kelamin %></td>
+                </tr>
+                <tr>
+                    <th>Nomor Identitas</th>
+                    <td><%= booking.nomor_identitas %></td>
+                </tr>
+                <tr>
+                    <th>Tipe Kamar</th>
+                    <td><%= booking.tipe_kamar %></td>
+                </tr>
+                <tr>
+                    <th>Harga Per Malam</th>
+                    <td>Rp <%= booking.harga %></td>
+                </tr>
+                <tr>
+                    <th>Tanggal Pesan</th>
+                    <td><%= booking.tanggal_pesan %></td>
+                </tr>
+                <tr>
+                    <th>Durasi Menginap</th>
+                    <td><%= booking.durasi_menginap %> Hari</td>
+                </tr>
+                <tr>
+                    <th>Termasuk Breakfast</th>
+                    <td><%= booking.termasuk_breakfast %></td>
+                </tr>
+                <tr>
+                    <th>Total Bayar</th>
+                    <td>Rp <%= booking.total_bayar %></td>
+                </tr>
+            </table>
+        </section>
+
+        <section>
+            <h2>Instruksi Pembayaran</h2>
+            <p>Silakan transfer ke rekening berikut:</p>
+            <ul>
+                <li>Bank: XYZ Bank</li>
+                <li>Nomor Rekening: 123456789</li>
+                <li>Atas Nama: NGAMAR.COM</li>
+            </ul>
+            <p>Setelah melakukan pembayaran, harap konfirmasi melalui email atau WhatsApp dengan menyertakan bukti pembayaran dan nomor pemesanan Anda.</p>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 NGAMAR.COM</p>
+    </footer>
+</body>
+</html>

@@ -83,6 +83,24 @@ app.post('/booking', (req, res) => {
     });
 });
 
+//halaman detail
+app.post('/booking/detail', (req, res) => {
+    const bookingData = {
+        nama_pemesan: req.body.nama_pemesan,
+        jenis_kelamin: req.body.jenis_kelamin,
+        nomor_identitas: req.body.nomor_identitas,
+        tipe_kamar: req.body.tipe_kamar,
+        harga: req.body.harga,
+        tanggal_pesan: req.body.tanggal_pesan,
+        durasi_menginap: req.body.durasi_menginap,
+        termasuk_breakfast: req.body.termasuk_breakfast ? 'Ya' : 'Tidak',
+        total_bayar: req.body.total_bayar
+    };
+
+    res.render('detail', { booking: bookingData });
+});
+
+
 // Halaman Admin untuk melihat dan mengelola data pemesanan
 app.get('/admin', (req, res) => {
     const sql = 'SELECT * FROM bookings';

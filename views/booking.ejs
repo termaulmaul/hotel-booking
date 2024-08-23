@@ -11,13 +11,13 @@
         <h1>Book a Room</h1>
         <nav>
             <a href="/">Home</a>
-            <a href="/products">Products</a>
-            <a href="/about">About Us</a>
-            <a href="/booking">Book Now</a>
+            <a href="/products">Produk</a>
+            <a href="/about">Tentang Kami</a>
+            <a href="/booking">Pesan Sekarang</a>
         </nav>
     </header>
     <main>
-        <form action="/booking" method="post">
+        <form id="bookingForm" action="/booking" method="post">
             <div>
                 <label for="nama_pemesan">Nama Pemesan:</label>
                 <input type="text" id="nama_pemesan" name="nama_pemesan" required>
@@ -39,13 +39,14 @@
             <div>
                 <label for="nomor_identitas">Nomor Identitas:</label>
                 <input type="text" id="nomor_identitas" name="nomor_identitas" pattern="\d{16}" required>
+                <span id="error_nomor_identitas" style="color: red; display: none;">Nomor identitas harus 16 digit angka.</span>
             </div>
             <div>
                 <label for="tipe_kamar">Tipe Kamar:</label>
                 <select id="tipe_kamar" name="tipe_kamar">
-                    <option value="Standar" data-harga="500000">Standar</option>
-                    <option value="Deluxe" data-harga="1000000">Deluxe</option>
-                    <option value="Family" data-harga="1500000">Family</option>
+                    <option value="Standar" data-harga="100000">Standar</option>
+                    <option value="Deluxe" data-harga="500000">Deluxe</option>
+                    <option value="Family" data-harga="1000000">Family</option>
                 </select>
             </div>
 
@@ -76,9 +77,52 @@
 
             <div>
                 <button type="button" onclick="hitungTotal()">Hitung Total</button>
-                <button type="submit">Pesan Sekarang</button>
+                <button type="button" onclick="tampilkanDetail()">Pesan Sekarang</button>
             </div>
         </form>
+
+        <!-- Section to display booking details -->
+        <section id="detailBooking" style="display: none; margin-top: 20px;">
+            <h2>Detail Booking Anda</h2>
+            <table>
+                <tr>
+                    <th>Nama Pemesan</th>
+                    <td id="detail_nama_pemesan"></td>
+                </tr>
+                <tr>
+                    <th>Jenis Kelamin</th>
+                    <td id="detail_jenis_kelamin"></td>
+                </tr>
+                <tr>
+                    <th>Nomor Identitas</th>
+                    <td id="detail_nomor_identitas"></td>
+                </tr>
+                <tr>
+                    <th>Tipe Kamar</th>
+                    <td id="detail_tipe_kamar"></td>
+                </tr>
+                <tr>
+                    <th>Harga</th>
+                    <td id="detail_harga"></td>
+                </tr>
+                <tr>
+                    <th>Tanggal Pesan</th>
+                    <td id="detail_tanggal_pesan"></td>
+                </tr>
+                <tr>
+                    <th>Durasi Menginap</th>
+                    <td id="detail_durasi_menginap"></td>
+                </tr>
+                <tr>
+                    <th>Termasuk Breakfast</th>
+                    <td id="detail_termasuk_breakfast"></td>
+                </tr>
+                <tr>
+                    <th>Total Bayar</th>
+                    <td id="detail_total_bayar"></td>
+                </tr>
+            </table>
+        </section>
     </main>
     <footer>
         <p>&copy; 2024 NGAMAR.COM</p>
@@ -89,17 +133,64 @@
             const harga = this.options[this.selectedIndex].getAttribute('data-harga');
             document.getElementById('harga').value = harga;
         });
+        function validasiNomorIdentitas() {
+    const nomorIdentitas = document.getElementById('nomor_identitas').value;
+    const errorElement = document.getElementById('error_nomor_identitas');
+    
+    if (nomorIdentitas.length !== 16 || !/^\d+$/.test(nomorIdentitas)) {
+        errorElement.style.display = 'block';
+        return false;
+    } else {
+        errorElement.style.display = 'none';
+        return true;
+    }
+}
 
         function hitungTotal() {
             const harga = parseFloat(document.getElementById('harga').value);
             const durasi = parseInt(document.getElementById('durasi_menginap').value);
             let total = harga * durasi;
 
-            if (durasi > 3) total *= 0.9;
+            if (durasi > 2) total *= 0.9;
 
-            if (document.getElementById('termasuk_breakfast').checked) total += 80000;
+            if (document.getElementById('termasuk_breakfast').checked) {
+                const breakfastCostPernight = 80000;
+                total +=breakfastCostPernight * durasi;
+            }
+
 
             document.getElementById('total_bayar').value = total;
+        }
+
+        function validasiNomorIdentitas() {
+            const nomorIdentitas = document.getElementById('nomor_identitas').value;
+            const errorElement = document.getElementById('error_nomor_identitas');
+            
+            if (nomorIdentitas.length !== 16 || !/^\d+$/.test(nomorIdentitas)) {
+                errorElement.style.display = 'block';
+                return false;
+            } else {
+                errorElement.style.display = 'none';
+                return true;
+            }
+        }
+        
+        function tampilkanDetail() {
+            if (!validasiNomorIdentitas()) {
+                return;
+            }
+        
+            document.getElementById('detail_nama_pemesan').innerText = document.getElementById('nama_pemesan').value;
+            document.getElementById('detail_jenis_kelamin').innerText = document.querySelector('input[name="jenis_kelamin"]:checked').value;
+            document.getElementById('detail_nomor_identitas').innerText = document.getElementById('nomor_identitas').value;
+            document.getElementById('detail_tipe_kamar').innerText = document.getElementById('tipe_kamar').value;
+            document.getElementById('detail_harga').innerText = document.getElementById('harga').value;
+            document.getElementById('detail_tanggal_pesan').innerText = document.getElementById('tanggal_pesan').value;
+            document.getElementById('detail_durasi_menginap').innerText = document.getElementById('durasi_menginap').value + " Hari";
+            document.getElementById('detail_termasuk_breakfast').innerText = document.getElementById('termasuk_breakfast').checked ? "Ya" : "Tidak";
+            document.getElementById('detail_total_bayar').innerText = document.getElementById('total_bayar').value;
+        
+            document.getElementById('detailBooking').style.display = 'block';
         }
     </script>
 </body>
